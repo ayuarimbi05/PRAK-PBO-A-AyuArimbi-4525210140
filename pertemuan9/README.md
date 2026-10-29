@@ -25,20 +25,23 @@ Praktikum sesi 9 membahas penggunaan package pada Java, namespace pada PHP, sert
 ```text
 java/
 ├── pom.xml
-└── src/
-    └── main/
-        └── java/
-            └── id/
-                └── ac/
-                    └── univpancasila/
-                        └── perpustakaan/
-                            ├── Main.java
-                            ├── model/
-                            │   ├── Buku.java
-                            │   ├── Anggota.java
-                            │   └── Jurusan.java
-                            └── service/
-                                └── PerpustakaanService.java
+├── src/
+│   ├── main/
+│   │   ├── java/                        
+│   │   │   └── id/ac/univpancasila/perpustakaan/
+│   │   │       ├── App.java
+│   │   │       ├── model/
+│   │   │       │   ├── Buku.java
+│   │   │       │   ├── Anggota.java
+│   │   │       │   └── Peminjaman.java
+│   │   │       ├── service/
+│   │   │       │   └── PerpustakaanService.java
+│   │   │       └── util/
+│   │   │           └── Format.java
+│   │   └── resources/                   
+│   └── test/
+│       └── java/                       
+└── target/
 ```
 
 ### B. PHP dengan Composer
