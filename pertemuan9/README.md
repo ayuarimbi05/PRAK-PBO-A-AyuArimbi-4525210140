@@ -49,16 +49,19 @@ java/
 ```text
 php/
 ├── composer.json
-├── composer.lock
-├── main.php
-└── src/
-    ├── Model/
-    │   ├── Buku.php
-    │   ├── Anggota.php
-    │   ├── Jurusan.php
-    │   └── Mahasiswa.php
-    └── Service/
-        └── PerpustakaanService.php
+├── composer.lock          
+├── main.php               
+├── src/
+│   ├── Model/
+│   │   ├── Buku.php       
+│   │   ├── Anggota.php
+│   │   └── Peminjaman.php
+│   ├── Service/
+│   │   └── PerpustakaanService.php
+│   └── Util/
+│       └── Format.php
+├── tests/                
+└── vendor/ hp
 ```
 
 ## 4. Package pada Java
