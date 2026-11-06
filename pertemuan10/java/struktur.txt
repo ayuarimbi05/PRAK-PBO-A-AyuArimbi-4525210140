@@ -1,0 +1,28 @@
+STRUKTUR PROYEK — SESI 10 (JAVA / MAVEN)
+========================================
+
+java/
+├── pom.xml
+├── struktur.txt
+└── src/
+    ├── main/
+    │   ├── java/id/ac/univpancasila/perpustakaan/
+    │   │   ├── Main.java
+    │   │   ├── exception/
+    │   │   │   ├── PerpustakaanException.java            (induk, unchecked)
+    │   │   │   ├── AnggotaTidakDitemukanException.java
+    │   │   │   ├── BatasPinjamTerlampauiException.java
+    │   │   │   ├── BukuSedangDipinjamException.java
+    │   │   │   └── BukuTidakDitemukanException.java
+    │   │   ├── model/                                    (kosong untuk sesi ini)
+    │   │   ├── service/
+    │   │   │   ├── LibraryService.java                   (SESUDAH refaktor)
+    │   │   │   ├── LibraryServiceKotor.java              (SEBELUM refaktor)
+    │   │   │   └── PerpustakaanService.java              (antarmuka konsol)
+    │   │   └── util/                                     (kosong untuk sesi ini)
+    │   └── resources/
+    └── test/java/
+
+Perintah:
+  mvn clean compile
+  mvn compile exec:java
