@@ -29,50 +29,67 @@ class RepositoryTest {
         repo = new Repository<>(Buku::isbn);
     }
 
-    @Test
-    @DisplayName("Item yang disimpan dapat ditemukan kembali")
-    void simpanLaluTemukan() {
-        repo.simpan(new Buku("978-1", "PBO"));
+   @Test
+@DisplayName("Item yang disimpan dapat ditemukan kembali")
+void simpanLaluTemukan() {
+    repo.simpan(new Buku("978-1", "PBO"));
 
-        // TODO 1: pastikan cariById("978-1") berisi nilai,
-        //         dan judulnya "PBO".
-        //         Petunjuk: assertTrue(...isPresent()) dan assertEquals(...)
-        fail("TODO 1 belum dikerjakan");
-    }
+    assertTrue(repo.cariById("978-1").isPresent());
+    assertEquals("PBO", repo.cariById("978-1").get().judul());
+}
 
-    @Test
-    @DisplayName("Mencari id yang tidak ada mengembalikan Optional kosong")
-    void cariYangTidakAda() {
-        // TODO 2
-        fail("TODO 2 belum dikerjakan");
-    }
+@Test
+@DisplayName("Mencari id yang tidak ada mengembalikan Optional kosong")
+void cariYangTidakAda() {
+    assertTrue(repo.cariById("999").isEmpty());
+}
 
-    @Test
-    @DisplayName("Item yang dihapus tidak dapat ditemukan lagi")
-    void hapusItem() {
-        // TODO 3
-        fail("TODO 3 belum dikerjakan");
-    }
+@Test
+@DisplayName("Item yang dihapus tidak dapat ditemukan lagi")
+void hapusItem() {
+    repo.simpan(new Buku("978-1", "PBO"));
 
-    @Test
-    @DisplayName("Repository baru berisi nol item")
-    void repositoryKosong() {
-        // TODO 4
-        fail("TODO 4 belum dikerjakan");
-    }
+    assertTrue(repo.hapus("978-1"));
+    assertTrue(repo.cariById("978-1").isEmpty());
+}
 
-    @Test
-    @DisplayName("Koleksi yang dikembalikan cariSemua tidak dapat diubah dari luar")
-    void koleksiTidakBocor() {
-        repo.simpan(new Buku("978-1", "PBO"));
+@Test
+@DisplayName("Repository baru berisi nol item")
+void repositoryKosong() {
+    assertEquals(0, repo.jumlah());
+}
 
-        // TODO 5: pastikan memanggil .add(...) pada hasil cariSemua()
-        //         melemparkan UnsupportedOperationException.
-        //         Petunjuk: assertThrows(UnsupportedOperationException.class, () -> ...)
-        fail("TODO 5 belum dikerjakan");
-    }
+@Test
+@DisplayName("Koleksi yang dikembalikan cariSemua tidak dapat diubah dari luar")
+void koleksiTidakBocor() {
+    repo.simpan(new Buku("978-1", "PBO"));
 
-    // TODO 6: tambahkan minimal TIGA pengujian lagi dari daftar skenario
-    //         yang Anda susun pada sesi 10, termasuk satu yang memastikan
-    //         exception yang benar dilemparkan.
+    assertThrows(UnsupportedOperationException.class,
+        () -> repo.cariSemua().add(new Buku("978-2", "Java")));
+}
+
+// Tiga pengujian tambahan
+
+@Test
+@DisplayName("Jumlah item bertambah setelah menyimpan buku")
+void jumlahBertambah() {
+    repo.simpan(new Buku("978-1", "PBO"));
+    assertEquals(1, repo.jumlah());
+}
+
+@Test
+@DisplayName("Menyimpan ID yang sama mengganti data sebelumnya")
+void simpanIdSama() {
+    repo.simpan(new Buku("978-1", "PBO"));
+    repo.simpan(new Buku("978-1", "Java"));
+
+    assertEquals(1, repo.jumlah());
+    assertEquals("Java", repo.cariById("978-1").get().judul());
+}
+
+@Test
+@DisplayName("Menghapus ID yang tidak tersedia menghasilkan false")
+void hapusIdTidakAda() {
+    assertFalse(repo.hapus("999"));
+}
 }

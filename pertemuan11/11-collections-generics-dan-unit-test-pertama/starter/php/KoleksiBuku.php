@@ -35,14 +35,15 @@ final class KoleksiBuku implements IteratorAggregate, Countable
 
     /** TODO 1: simpan buku dengan kunci ISBN-nya. */
     public function simpan(Buku $b): void
-    {
-    }
+{
+    $this->items[$b->getIsbn()] = $b;
+}
 
     /** TODO 2: kembalikan Buku atau null. Perhatikan tipe kembaliannya: ?Buku */
     public function cariByIsbn(string $isbn): ?Buku
-    {
-        return null;   // ganti
-    }
+{
+    return $this->items[$isbn] ?? null;
+}
 
     /** @return Buku[] */
     public function semua(): array { return array_values($this->items); }
@@ -53,9 +54,11 @@ final class KoleksiBuku implements IteratorAggregate, Countable
      *         Jangan lupa array_values agar indeksnya tidak berlubang.
      */
     public function filter(callable $predikat): self
-    {
-        return new self();   // ganti
-    }
+{
+    return new self(array_values(
+        array_filter($this->items, $predikat)
+    ));
+}
 
     /**
      * TODO 4: kembalikan larik hasil pemetaan.
@@ -66,23 +69,34 @@ final class KoleksiBuku implements IteratorAggregate, Countable
      * @return mixed[]
      */
     public function map(callable $f): array
-    {
-        return [];   // ganti
-    }
+{
+    return array_map($f, array_values($this->items));
+}
 
     /** TODO 5: jumlahkan hasil $f atas seluruh item. Petunjuk: array_reduce */
     public function jumlahkan(callable $f): float
-    {
-        return 0.0;   // ganti
-    }
+{
+    return (float) array_reduce(
+        $this->items,
+        fn($total, $buku) => $total + $f($buku),
+        0.0
+    );
+}
 
     /**
      * TODO 6: kelompokkan item berdasarkan kunci hasil $kunci($buku).
      * @return array<string,Buku[]>
      */
-    public function kelompokkan(callable $kunci): array
+        public function kelompokkan(callable $kunci): array
     {
-        return [];   // ganti
+        $hasil = [];
+
+        foreach ($this->items as $buku) {
+            $key = (string) $kunci($buku);
+            $hasil[$key][] = $buku;
+        }
+
+        return $hasil;
     }
 
     public function getIterator(): ArrayIterator
@@ -90,5 +104,8 @@ final class KoleksiBuku implements IteratorAggregate, Countable
         return new ArrayIterator(array_values($this->items));
     }
 
-    public function count(): int { return count($this->items); }
+    public function count(): int
+    {
+        return count($this->items);
+    }
 }

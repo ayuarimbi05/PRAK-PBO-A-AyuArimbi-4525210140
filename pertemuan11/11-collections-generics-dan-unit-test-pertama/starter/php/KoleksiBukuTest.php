@@ -1,63 +1,64 @@
+
 <?php
 declare(strict_types=1);
 
-namespace Perpustakaan\Tests;
+namespace Perpustakaan\Model;
 
-use PHPUnit\Framework\TestCase;
-use Perpustakaan\Model\Buku;
-use Perpustakaan\Model\KoleksiBuku;
+use Countable;
+use IteratorAggregate;
+use ArrayIterator;
+use Traversable;
 
-/**
- * Sesi 11 — unit test PHPUnit.
- *
- * Letakkan di tests/ dan pastikan autoload-dev pada composer.json sudah
- * memetakan Perpustakaan\Tests\ ke tests/.
- *
- * Jalankan: ./vendor/bin/phpunit tests
- */
-final class KoleksiBukuTest extends TestCase
+class KoleksiBuku implements Countable, IteratorAggregate
 {
-    private KoleksiBuku $koleksi;
+    private array $items = [];
 
-    protected function setUp(): void
+    public function simpan(Buku $b): void
     {
-        // Dijalankan ulang sebelum SETIAP pengujian.
-        $this->koleksi = new KoleksiBuku();
+        $this->items[$b->getIsbn()] = $b;
     }
 
-    public function testItemYangDisimpanDapatDitemukanKembali(): void
+    public function cariByIsbn(string $isbn): ?Buku
     {
-        // TODO 1
-        $this->fail('TODO 1 belum dikerjakan');
+        return $this->items[$isbn] ?? null;
     }
 
-    public function testMencariIsbnYangTidakAdaMengembalikanNull(): void
+    public function hapus(string $isbn): void
     {
-        // TODO 2
-        $this->fail('TODO 2 belum dikerjakan');
+        unset($this->items[$isbn]);
     }
 
-    public function testKoleksiBaruBerisiNolItem(): void
+    public function count(): int
     {
-        // TODO 3: perhatikan bahwa count($this->koleksi) bekerja
-        //         karena kelasnya implements Countable.
-        $this->fail('TODO 3 belum dikerjakan');
+        return count($this->items);
     }
 
-    public function testFilterHanyaMengembalikanYangLolosPredikat(): void
+    public function getIterator(): Traversable
     {
-        // TODO 4
-        $this->fail('TODO 4 belum dikerjakan');
+        return new ArrayIterator($this->items);
     }
 
-    public function testJumlahkanMenghitungTotalDenganBenar(): void
+    public function filter(callable $predikat): self
     {
-        // TODO 5
-        $this->fail('TODO 5 belum dikerjakan');
+        $hasil = new self();
+
+        foreach ($this->items as $buku) {
+            if ($predikat($buku)) {
+                $hasil->simpan($buku);
+            }
+        }
+
+        return $hasil;
     }
 
-    // TODO 6: terjemahkan minimal LIMA skenario dari skenario-uji.md sesi 10
-    //         menjadi kasus uji di sini, termasuk satu yang memastikan
-    //         exception yang benar dilemparkan.
-    //         Petunjuk: $this->expectException(BukuTidakDitemukanException::class);
+    public function jumlahkan(callable $penghitung): float
+    {
+        $total = 0;
+
+        foreach ($this->items as $buku) {
+            $total += $penghitung($buku);
+        }
+
+        return $total;
+    }
 }
